@@ -1,4 +1,5 @@
 import io
+import logging
 import os
 import uuid
 from typing import Union
@@ -8,6 +9,8 @@ from _pytest.config import Config, ExitCode
 from _pytest.main import Session
 from _pytest.terminal import TerminalReporter
 from swiftclient import ClientException
+
+log = logging.getLogger(__name__)
 
 
 class HTMLSwift:
@@ -60,58 +63,53 @@ class HTMLSwift:
             },
         )
         try:
-            result = conn.get_container(self.os_bucket)
-            print(result)
+            conn.get_container(self.os_bucket)
         except ClientException as e:
             if e.http_status == 404:
-                print("Bucket does not exist")
+                log.info("Bucket does not exist")
                 if self.os_policy == "download":
                     try:
-                        result = conn.put_container(
+                        conn.put_container(
                             self.os_bucket,
                             headers={"X-Container-Read": ".r:*,.rlistings"},
                         )
-                        print(result)
-                        print(
+                        log.info(
                             "Create bucket "
                             + self.os_bucket
                             + " with policy public successfully!"
                         )
                     except ClientException as e:
-                        print(e.http_status, e.msg)
+                        log.error(e.http_status, e.msg)
                         exit(1)
                 else:
-                    result = conn.put_container(self.os_bucket)
-                    print(result)
-                    print("Create bucket " + self.os_bucket + " successfully!")
+                    conn.put_container(self.os_bucket)
+                    log.info("Create bucket " + self.os_bucket + " successfully!")
 
         # upload file to Swift storage
         with io.StringIO(content) as f:
             if self.os_retention:
                 try:
-                    result = conn.put_object(
+                    conn.put_object(
                         self.os_bucket,
                         name,
                         contents=f.read(),
                         content_type="text/html",
                         headers={"X-Delete-After": self.os_retention},
                     )
-                    print(result)
-                    print(
+                    log.info(
                         f"Create object successfully with retention ! objectUrl: {self.get_access_url(name)}"
                     )
                 except ClientException as e:
-                    print(e.http_status, e.msg)
+                    log.error(e.http_status, e.msg)
                     exit(1)
             else:
-                result = conn.put_object(
+                conn.put_object(
                     self.os_bucket,
                     name,
                     contents=f.read(),
                     content_type="text/html",
                 )
-                print(result)
-                print(
+                log.info(
                     f"Create object successfully! objectUrl: {self.get_access_url(name)}"
                 )
 

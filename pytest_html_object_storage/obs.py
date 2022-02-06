@@ -1,3 +1,4 @@
+import logging
 import os
 import uuid
 from typing import Union
@@ -13,6 +14,8 @@ from obs import (
     Lifecycle,
     Expiration,
 )
+
+log = logging.getLogger(__name__)
 
 
 class HTMLObs:
@@ -55,12 +58,12 @@ class HTMLObs:
 
         resp = obsClient.headBucket(self.os_bucket)
         if resp.status == 404:
-            print("Bucket does not exist")
+            log.info("Bucket does not exist")
             resp = obsClient.createBucket(
                 bucketName=self.os_bucket, location=self.os_region_name
             )
             if resp.status < 300:
-                print("Create bucket " + self.os_bucket + " successfully!")
+                log.info("Create bucket " + self.os_bucket + " successfully!")
                 if self.os_retention:
                     rule = Rule(
                         prefix="",
@@ -73,23 +76,23 @@ class HTMLObs:
                     lifecycle = Lifecycle(rule=[rule])
                     resp = obsClient.setBucketLifecycle(self.os_bucket, lifecycle)
                     if resp.status < 300:
-                        print("Create bucket life cycle rule successfully!")
+                        log.info("Create bucket life cycle rule successfully!")
                     else:
-                        print(
+                        log.error(
                             f"Create bucket life cycle rule errorCode:{resp.errorCode}, "
                             f"errorMessage: {resp.errorMessage}"
                         )
             else:
-                print(
+                log.error(
                     f"Create bucket errorCode:{resp.errorCode}, errorMessage: {resp.errorMessage}"
                 )
 
         resp = obsClient.putContent(self.os_bucket, name, content)
         if resp.status < 300:
             self.os_access_object_url = resp.body.objectUrl
-            print(f"Create object successfully! objectUrl: {self.os_access_object_url}")
+            log.info(f"Create object successfully! objectUrl: {self.os_access_object_url}")
         else:
-            print(
+            log.error(
                 f"Create object errorCode:{resp.errorCode}, errorMessage: {resp.errorMessage}"
             )
         if self.os_policy == "download":
@@ -97,9 +100,9 @@ class HTMLObs:
                 self.os_bucket, name, aclControl=HeadPermission.PUBLIC_READ
             )
             if resp.status < 300:
-                print("Create object policy public successfully!")
+                log.info("Create object policy public successfully!")
             else:
-                print(
+                log.error(
                     f"Create object policy public errorCode:{resp.errorCode}, errorMessage: {resp.errorMessage}"
                 )
         obsClient.close()

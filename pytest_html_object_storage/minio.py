@@ -20,6 +20,7 @@ class HTMLMinio:
         self.os_bucket = os.environ.get("OBJECT_STORAGE_BUCKET")
         self.os_username = os.environ.get("OBJECT_STORAGE_USERNAME")
         self.os_password = os.environ.get("OBJECT_STORAGE_PASSWORD")
+        self.os_region_name = os.environ.get("OBJECT_STORAGE_REGION_NAME")
         self.os_scheme, self.os_secure = self._get_secure()
         self.os_retention = self._get_retention()
         self.os_policy = self._get_policy()
@@ -72,6 +73,7 @@ class HTMLMinio:
             self.os_endpoint,
             self.os_username,
             self.os_password,
+            region=self.os_region_name,
             secure=self.os_secure,
         )
         found = client.bucket_exists(self.os_bucket)

@@ -22,6 +22,7 @@ Allow to send HTML report on object-storage.
     OBJECT_STORAGE_BUCKET="bucket"
     OBJECT_STORAGE_USERNAME="admin"
     OBJECT_STORAGE_PASSWORD="password"
+    OBJECT_STORAGE_REGION_NAME=""
 
 ### Common Optional
 
@@ -38,11 +39,6 @@ Allow to send HTML report on object-storage.
 
     OBJECT_STORAGE_TENANT_ID=""
     OBJECT_STORAGE_TENANT_NAME=""
-    OBJECT_STORAGE_REGION_NAME=""
-
-### Specific OBS
-
-    OBJECT_STORAGE_REGION_NAME=""
 
 ## Add option to send HTML report
 
