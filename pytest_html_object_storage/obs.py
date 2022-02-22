@@ -36,8 +36,8 @@ class HTMLObs:
     @staticmethod
     def _get_policy() -> str:
         policy = os.environ.get("OBJECT_STORAGE_POLICY")
-        if not policy or policy == "download":
-            return "download"
+        if not policy or policy == "public-read":
+            return "public-read"
         else:
             return ""
 
@@ -95,7 +95,7 @@ class HTMLObs:
             log.error(
                 f"Create object errorCode:{resp.errorCode}, errorMessage: {resp.errorMessage}"
             )
-        if self.os_policy == "download":
+        if self.os_policy == "public-read":
             resp = obsClient.setObjectAcl(
                 self.os_bucket, name, aclControl=HeadPermission.PUBLIC_READ
             )

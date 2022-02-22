@@ -30,8 +30,8 @@ class HTMLSwift:
     @staticmethod
     def _get_policy() -> str:
         policy = os.environ.get("OBJECT_STORAGE_POLICY")
-        if not policy or policy == "download":
-            return "download"
+        if not policy or policy == "public-read":
+            return "public-read"
         else:
             return ""
 
@@ -67,7 +67,7 @@ class HTMLSwift:
         except ClientException as e:
             if e.http_status == 404:
                 log.info("Bucket does not exist")
-                if self.os_policy == "download":
+                if self.os_policy == "public-read":
                     try:
                         conn.put_container(
                             self.os_bucket,

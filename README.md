@@ -6,7 +6,7 @@ Allow to send HTML report on object-storage.
 
 ## Implementations
 
-* [MinIO](https://min.io/)
+* [MinIO](https://min.io/) (tested with Scaleway)
 * [Swift](https://docs.openstack.org/python-swiftclient/newton/swiftclient.html) (tested with OVH)
 * [OBS](https://github.com/huaweicloud/huaweicloud-sdk-python-obs) (tested with Orange Flexible Engine)
 
@@ -26,7 +26,7 @@ Allow to send HTML report on object-storage.
 
 ### Common Optional
 
-    OBJECT_STORAGE_POLICY="private"
+    OBJECT_STORAGE_POLICY="private" // public-read
     OBJECT_STORAGE_RETENTION="30" // day unit
 
 ### Specific MinIO
@@ -34,6 +34,7 @@ Allow to send HTML report on object-storage.
 #### Optional
 
     OBJECT_STORAGE_SECURE="false"
+    OBJECT_STORAGE_PROVIDER="default" // scaleway
 
 ### Specific Swift
 

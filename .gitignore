@@ -213,3 +213,4 @@ cython_debug/
 
 tests/test_obs.py
 tests/test_swift.py
+tests/test_scaleway.py
