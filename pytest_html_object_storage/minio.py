@@ -1,5 +1,6 @@
 import io
 import json
+import logging
 import os
 import uuid
 from datetime import timedelta, datetime
@@ -12,6 +13,9 @@ from minio import Minio
 from minio.commonconfig import GOVERNANCE, ENABLED, Filter
 from minio.lifecycleconfig import Rule, Transition, Expiration, LifecycleConfig
 from minio.retention import Retention
+
+
+log = logging.getLogger(__name__)
 
 
 class HTMLMinio:
@@ -128,11 +132,16 @@ class HTMLMinio:
         if html:
             html._post_process_reports()
             name = f"{str(uuid.uuid4())}/report.html"
-            self.send_html(
-                name,
-                html._generate_report(session),
-            )
-            session.config._report_url = self.get_access_url(name)
+            try:
+                self.send_html(
+                    name,
+                    html._generate_report(session),
+                )
+                session.config._report_url = self.get_access_url(name)
+            except Exception as e:
+                log.error(
+                    f"Minio send_html error: {self.os_endpoint} - {e}"
+                )
 
     def pytest_terminal_summary(
         self,

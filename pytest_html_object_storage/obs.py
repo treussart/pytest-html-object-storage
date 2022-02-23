@@ -111,11 +111,16 @@ class HTMLObs:
         html = getattr(session.config, "_html", None)
         if html:
             html._post_process_reports()
-            self.send_html(
-                f"{str(uuid.uuid4())}/report.html",
-                html._generate_report(session),
-            )
-            session.config._report_url = self.os_access_object_url
+            try:
+                self.send_html(
+                    f"{str(uuid.uuid4())}/report.html",
+                    html._generate_report(session),
+                )
+                session.config._report_url = self.os_access_object_url
+            except Exception as e:
+                log.error(
+                    f"Obs send_html error: {self.os_endpoint} - {e}"
+                )
 
     def pytest_terminal_summary(
         self,
