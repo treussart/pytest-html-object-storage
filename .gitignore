@@ -211,6 +211,6 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-tests/test_obs.py
 tests/test_swift.py
 tests/test_scaleway.py
+/tests/test_scal.py

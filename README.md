@@ -8,7 +8,6 @@ Allow to send HTML report on object-storage.
 
 * [MinIO](https://min.io/) (tested with Scaleway)
 * [Swift](https://docs.openstack.org/python-swiftclient/newton/swiftclient.html) (tested with OVH)
-* [OBS](https://github.com/huaweicloud/huaweicloud-sdk-python-obs) (tested with Orange Flexible Engine)
 
 ## installation
 
@@ -50,11 +49,6 @@ Allow to send HTML report on object-storage.
 ### Swift
 
     pytest --store-swift
-
-### OBS
-
-    pytest --store-obs
-
 
 ## Dev
 

@@ -34,7 +34,6 @@ setup(
         "minio",
         "python-keystoneclient",
         "python-swiftclient",
-        "huaweicloud-sdk-python-obs",
     ],
     entry_points={
         "pytest11": ["html_object_storage = pytest_html_object_storage.plugin"]
