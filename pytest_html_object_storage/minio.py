@@ -3,16 +3,14 @@ import json
 import logging
 import os
 import uuid
-from datetime import timedelta, datetime
-from typing import Union, Optional
+from typing import Union
 
 from _pytest.config import Config, ExitCode
 from _pytest.main import Session
 from _pytest.terminal import TerminalReporter
 from minio import Minio
-from minio.commonconfig import GOVERNANCE, ENABLED, Filter
-from minio.lifecycleconfig import Rule, Transition, Expiration, LifecycleConfig
-from minio.retention import Retention
+from minio.commonconfig import ENABLED, Filter
+from minio.lifecycleconfig import Rule, Expiration, LifecycleConfig
 
 
 log = logging.getLogger(__name__)
