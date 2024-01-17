@@ -29,13 +29,22 @@ class HTMLMinio:
         self.os_retention = self._get_retention()
         self.os_policy = self._get_policy()
         self.os_provider = os.environ.get("OBJECT_STORAGE_PROVIDER")
+        self.os_http_report_url = os.environ.get("HTTP_REPORT_URL")
         self.access_url = None
 
+
     def get_access_url(self, name: str) -> str:
-        self.access_url = (
-            f"{self.os_scheme}://{self.os_endpoint}/{self.os_bucket}/{name}"
-        )
+        if self.os_http_report_url:
+            self.access_url = (
+                f"{self.os_scheme}://{self.os_http_report_url}/{self.os_bucket}/{name}"
+            )
+        else:
+            self.access_url = (
+                f"{self.os_scheme}://{self.os_endpoint}/{self.os_bucket}/{name}"
+            )
+
         return self.access_url
+
 
     @staticmethod
     def _get_secure() -> [str, bool]:
@@ -43,6 +52,7 @@ class HTMLMinio:
             return "http", False
         else:
             return "https", True
+
 
     @staticmethod
     def _get_retention() -> int:
@@ -52,12 +62,14 @@ class HTMLMinio:
         else:
             return 0
 
+
     def _get_policy(self) -> str:
         policy = os.environ.get("OBJECT_STORAGE_POLICY")
         if not policy or policy == "public-read":
             return "public-read"
         else:
             return ""
+
 
     def send_html(self, name, contentfile: str):
         client = Minio(
@@ -123,6 +135,7 @@ class HTMLMinio:
             content_type="text/html",
         )
 
+
     @pytest.hookimpl(trylast=True, hookwrapper=True)
     def pytest_sessionfinish(self, session, exitstatus):
         outcome = yield
@@ -137,6 +150,7 @@ class HTMLMinio:
                 session.config._report_url = self.get_access_url(name)
             except Exception as e:
                 log.error(f"Minio send_html error: {self.os_endpoint} - {e}")
+
 
     def pytest_terminal_summary(
         self,
