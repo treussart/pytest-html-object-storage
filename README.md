@@ -34,6 +34,7 @@ Allow to send HTML report on object-storage.
 
     OBJECT_STORAGE_SECURE="false"
     OBJECT_STORAGE_PROVIDER="default" // scaleway
+    HTTP_REPORT_URL="" // use case when you want to use a reverse proxy to serve the html report provided by the provider
 
 ### Specific Swift
 
