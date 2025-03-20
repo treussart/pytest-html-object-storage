@@ -36,7 +36,7 @@ class HTMLMinio:
     def get_access_url(self, name: str) -> str:
         if self.os_http_report_url:
             self.access_url = (
-                f"{self.os_scheme}://{self.os_http_report_url}/{self.os_bucket}/{name}"
+                f"{self.os_scheme}://{self.os_http_report_url}/{name}"
             )
         else:
             self.access_url = (
